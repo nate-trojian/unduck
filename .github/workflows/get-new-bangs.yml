@@ -17,7 +17,7 @@ on:
 jobs:
     Download-ddg-bangs:
         runs-on: ubuntu-latest
-        if: !inputs.skip_download
+        if: inputs.skip_download != true
         outputs:
             new-bangs: ${{ steps.new-bangs.outcome }}
         steps:
