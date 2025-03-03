@@ -1,0 +1,32 @@
+name: Get new bangs
+on: 
+    schedule: 
+        - cron: "0 0 * * *"
+jobs:
+    Download-ddg-bangs:
+        runs-on: ubuntu-latest
+        outputs:
+            new-bangs: ${{ steps.new-bangs.outcome }}
+        steps:
+            - uses: actions/checkout@v4
+            - name: Fetch latest bangs
+              run: curl https://duckduckgo.com/bang.js -O
+            - name: Get last bangs version in artifacts
+              id: get-artifact
+              uses: actions/download-artifact@v4
+              with:
+                name: latest-bangs.js
+              continue-on-error: true
+            - name: Compare versions
+              if: steps.get-artifact.outcome == 'success'
+              id: compare-bangs
+              run: diff -sq latest-bangs.js bang.js > /dev/null
+              continue-on-error: true
+            - name: Upload new bangs
+              if: steps.compare-bangs.outcome == 'failure' || steps.get-artifact.outcome == 'failure'
+              id: new-bangs
+              uses: actions/upload-artifact@v4
+              with:
+                name: latest-bangs.js
+                path: bang.js
+                overwrite: true
