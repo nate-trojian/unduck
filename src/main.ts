@@ -32,10 +32,10 @@ function getBangredirectUrl() {
 
 function doRedirect() {
   const app = document.getElementById("app")!;
-  app.hidden = true;
+  app.style.visibility = "hidden";
   const searchUrl = getBangredirectUrl();
   if (!searchUrl) {
-    app.hidden = false;
+    app.style.visibility = "visible";
     return;
   }
   window.location.replace(searchUrl);
