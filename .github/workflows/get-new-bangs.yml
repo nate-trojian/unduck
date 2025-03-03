@@ -24,6 +24,6 @@ jobs:
               run: diff -sq latest-bangs.js bang.js > /dev/null
               continue-on-error: true
             - name: Upload new bangs
-              if: steps.compare-bangs.outcome == 'failure'
+              if: steps.compare-bangs.outcome == 'failure' || steps.get-cached-bangs.cache-hit == 'false'
               id: new-bangs
               run: 'mv -f bang.js latest-bangs.js'
