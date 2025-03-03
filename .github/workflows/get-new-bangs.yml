@@ -7,11 +7,17 @@ on:
                 required: false
                 default: false
                 type: boolean
+            skip_download:
+                description: 'Skip downloading new bangs'
+                required: false
+                default: false
+                type: boolean
     schedule: 
         - cron: "0 0 * * *"
 jobs:
     Download-ddg-bangs:
         runs-on: ubuntu-latest
+        if: !inputs.skip_download
         outputs:
             new-bangs: ${{ steps.new-bangs.outcome }}
         steps:
