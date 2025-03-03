@@ -17,6 +17,7 @@ jobs:
               uses: actions/cache@v4
               with:
                 key: latest-bangs.js
+                path: latest-bangs.js
             - name: Compare versions
               if: steps.get-cached-bangs.cache-hit == 'success'
               id: compare-bangs
