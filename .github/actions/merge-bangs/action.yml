@@ -1,8 +1,5 @@
 name: 'Merge bangs'
 description: 'Merge bang json files'
-outputs:
-  bang-file:
-    description: 'The merged bang file'
 runs:
   using: 'node20'
   main: 'dist/index.js'
