@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "run": "node dist/index.js",
     "package": "npx rollup --config rollup.config.js"
   },
   "devDependencies": {

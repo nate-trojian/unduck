@@ -1,4 +1,5 @@
 name: Get new bangs
+
 on:
     workflow_dispatch:
         inputs:
@@ -56,3 +57,13 @@ jobs:
               run: 'cd .github/actions/merge-bangs && npm install && npm run package && cd -'
             - name: Generate new bangs file
               uses: ./.github/actions/merge-bangs
+            - name: Commit changes
+              env:
+                GITHUB_ID: ${{ github.actor_id }}
+                GITHUB_ACTOR: ${{ github.actor }}
+              run: |
+                git config user.name "github-actions[bot]"
+                git config user.email "${GITHUB_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
+                git add src/bang.ts
+                git commit -m "generate new bang file"
+                git push
