@@ -31,8 +31,13 @@ function getBangredirectUrl() {
 }
 
 function doRedirect() {
+  const app = document.getElementById("app")!;
+  app.hidden = true;
   const searchUrl = getBangredirectUrl();
-  if (!searchUrl) return;
+  if (!searchUrl) {
+    app.hidden = false;
+    return;
+  }
   window.location.replace(searchUrl);
 }
 
