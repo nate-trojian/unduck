@@ -9,21 +9,29 @@ jobs:
         outputs:
             new-bangs: ${{ steps.new-bangs.outcome }}
         steps:
-            - uses: actions/checkout@v4
             - name: Fetch latest bangs
               run: curl https://duckduckgo.com/bang.js -O
             - name: Get last bangs version from cache
               id: get-cached-bangs
               uses: actions/cache@v4
               with:
-                key: latest-bangs.js
-                path: latest-bangs.js
+                key: latest-ddg-bangs.json
+                path: latest-ddg-bangs.json
             - name: Compare versions
               if: steps.get-cached-bangs.cache-hit == 'success'
               id: compare-bangs
-              run: diff -sq latest-bangs.js bang.js > /dev/null
+              run: diff -sq latest-ddg-bangs.json bang.js > /dev/null
               continue-on-error: true
             - name: Upload new bangs
               if: steps.compare-bangs.outcome == 'failure' || steps.get-cached-bangs.cache-hit == 'false'
               id: new-bangs
-              run: 'mv -f bang.js latest-bangs.js'
+              run: 'mv -f bang.js latest-ddg-bangs.json'
+    Generate-new-bangs-file:
+        runs-on: ubuntu-latest
+        needs: Download-ddg-bangs
+        if: needs.Download-ddg-bangs.outputs.new-bangs == 'success'
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Generate new bangs file
+              uses: ./.github/actions/merge-bangs

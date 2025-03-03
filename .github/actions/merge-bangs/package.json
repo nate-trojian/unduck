@@ -1,0 +1,9 @@
+{
+  "name": "merge-bangs",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "dependencies": {
+    "@actions/core": "^1.11.1"
+  }
+}
