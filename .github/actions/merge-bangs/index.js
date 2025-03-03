@@ -9,7 +9,7 @@ try {
   let overwrites = Object.fromEntries(overwritesFile.map((o) => [o.t, o]));
   let final = { ...ddgBangs, ...overwrites };
   await fs.writeFile(
-    "../../../src/bang.ts",
+    "src/bang.ts",
     `export const bangs: Record<string, Bang> = ${JSON.stringify(final)}`
   );
   core.info("bangs file updated");
