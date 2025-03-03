@@ -18,12 +18,12 @@ jobs:
                 key: latest-ddg-bangs.json
                 path: latest-ddg-bangs.json
             - name: Compare versions
-              if: steps.get-cached-bangs.cache-hit == 'success'
+              if: steps.get-cached-bangs.outputs.cache-hit == 'success'
               id: compare-bangs
               run: diff -sq latest-ddg-bangs.json bang.js > /dev/null
               continue-on-error: true
             - name: Upload new bangs
-              if: steps.compare-bangs.outcome == 'failure' || steps.get-cached-bangs.cache-hit == 'false'
+              if: steps.compare-bangs.outcome == 'failure' || steps.get-cached-bangs.outputs.cache-hit == 'false'
               id: new-bangs
               run: 'mv -f bang.js latest-ddg-bangs.json'
     Generate-new-bangs-file:
