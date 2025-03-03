@@ -7,11 +7,6 @@ on:
                 required: false
                 default: false
                 type: boolean
-            skip_download:
-                description: 'Skip downloading new bangs'
-                required: false
-                default: false
-                type: boolean
     schedule: 
         - cron: "0 0 * * *"
 jobs:
@@ -21,7 +16,6 @@ jobs:
             new-bangs: ${{ steps.new-bangs.outcome }}
         steps:
             - name: Fetch latest bangs
-              if: inputs.skip_download != true
               run: curl https://duckduckgo.com/bang.js -O
             - name: Get last bangs version from cache
               id: get-cached-bangs
@@ -30,12 +24,12 @@ jobs:
                 key: latest-ddg-bangs.json
                 path: latest-ddg-bangs.json
             - name: Compare versions
-              if: steps.get-cached-bangs.outputs.cache-hit == 'true' && inputs.skip_download != true
+              if: steps.get-cached-bangs.outputs.cache-hit == 'true'
               id: compare-bangs
               run: diff -sq latest-ddg-bangs.json bang.js > /dev/null
               continue-on-error: true
             - name: Upload new bangs
-              if: steps.compare-bangs.outcome != 'success' || steps.get-cached-bangs.outputs.cache-hit != 'true'
+              if: steps.compare-bangs.outcome == 'failure' || steps.get-cached-bangs.outputs.cache-hit != 'true'
               id: new-bangs
               run: 'mv -f bang.js latest-ddg-bangs.json'
     Generate-new-bangs-file:
