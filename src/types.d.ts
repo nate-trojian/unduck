@@ -5,6 +5,6 @@ interface Bang {
     r: number;
     s: string;
     sc?: string;
-    t: string;
+    // t: string;
     u: string;
 }
