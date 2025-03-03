@@ -12,22 +12,17 @@ jobs:
             - uses: actions/checkout@v4
             - name: Fetch latest bangs
               run: curl https://duckduckgo.com/bang.js -O
-            - name: Get last bangs version in artifacts
-              id: get-artifact
-              uses: actions/download-artifact@v4
+            - name: Get last bangs version from cache
+              id: get-cached-bangs
+              uses: actions/cache@v4
               with:
-                name: latest-bangs.js
-              continue-on-error: true
+                key: latest-bangs.js
             - name: Compare versions
-              if: steps.get-artifact.outcome == 'success'
+              if: steps.get-cached-bangs.cache-hit == 'success'
               id: compare-bangs
               run: diff -sq latest-bangs.js bang.js > /dev/null
               continue-on-error: true
             - name: Upload new bangs
-              if: steps.compare-bangs.outcome == 'failure' || steps.get-artifact.outcome == 'failure'
+              if: steps.compare-bangs.outcome == 'failure'
               id: new-bangs
-              uses: actions/upload-artifact@v4
-              with:
-                name: latest-bangs.js
-                path: bang.js
-                overwrite: true
+              run: 'mv -f bang.js latest-bangs.js'
