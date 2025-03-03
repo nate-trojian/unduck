@@ -1,7 +1,7 @@
 import core from "@actions/core";
 
-import ddgBangsFile from "./latest-ddg-bangs.json" assert { type: "json" };
-import overwritesFile from "./overwrites.json" assert { type: "json" };
+import ddgBangsFile from "../../../latest-ddg-bangs.json" assert { type: "json" };
+import overwritesFile from "../../../overwrites.json" assert { type: "json" };
 
 try {
   let ddgBangs = ddgBangsFile.then((bangs) => bangs.map((b) => [b.t, b]));
