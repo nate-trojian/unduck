@@ -33,5 +33,14 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+            - name: Load custom action
+              id: get-merge-bangs-action
+              uses: actions/cache@v4
+              with:
+                key: merge-bangs-action
+                path: .github/actions/merge-bangs/dist
+            - name: Install action
+              if: steps.get-merge-bangs-action.outputs.cache-hit != 'true'
+              run: 'cd .github/actions/merge-bangs && npm install && npm run package & cd -'
             - name: Generate new bangs file
               uses: ./.github/actions/merge-bangs

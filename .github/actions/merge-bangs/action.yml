@@ -5,4 +5,4 @@ outputs:
     description: 'The merged bang file'
 runs:
   using: 'node20'
-  main: 'index.js'
+  main: 'dist/index.js'
